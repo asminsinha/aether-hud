@@ -1,8 +1,0 @@
-# Step 1: Ignore absolutely everything by default
-/*
-
-# Step 2: Whitelist ONLY the absolute necessities for the backend
-!api
-!app.py
-!requirements.txt
-!vercel.json
