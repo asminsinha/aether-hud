@@ -18,10 +18,10 @@ last_net_io = psutil.net_io_counters()
 last_net_time = time.time()
 cached_network_info = {"ip": "127.0.0.1", "node": "LOCAL_NODE"}
 
-# paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-GIF_PATH = os.path.join(BASE_DIR,"public", "jarvis.gif")
-GIF_PATH2 = os.path.join(BASE_DIR,"public", "jarvis_back.gif")
+PUBLIC_DIR = os.path.join(os.path.dirname(BASE_DIR), "public")
+GIF_PATH = os.path.join(PUBLIC_DIR, "jarvis.gif")
+GIF_PATH2 = os.path.join(PUBLIC_DIR, "jarvis_back.gif")
 
 
 
@@ -175,75 +175,6 @@ def get_network_topology():
         "nodes": devices
     })
 
-
-    data = requests.json
-    raw_input = data.get("input", "").strip()
-    mode = data.get("mode", "math")
-
-    try:
-        # --- ALGEBRA ENGINE (SymPy) ---
-        if mode == "algebra":
-            # Example input: "x**2 + 2*x - 8 = 0"
-            if "=" in raw_input:
-                left, right = raw_input.split("=")
-                equation = sp.Eq(sp.sympify(left), sp.sympify(right))
-                result = sp.solve(equation)
-            else:
-                result = sp.simplify(raw_input)
-            return jsonify({"success": True, "result": str(result)})
-
-        # --- CHEMISTRY ENGINE (ChemPy) ---
-        elif mode == "chemistry":
-            # Example input: "H2 + O2 -> H2O"
-            reactants_raw, products_raw = raw_input.split("->")
-            reactants = reactants_raw.replace(" ","").split("+")
-            products = products_raw.replace(" ","").split("+")
-            reac, prod = balance_stoichiometry(set(reactants), set(products))
-            
-            # Format: 2 H2 + 1 O2 -> 2 H2O
-            balanced = " + ".join([f"{v} {k}" for k, v in reac.items()]) + " -> " + \
-                       " + ".join([f"{v} {k}" for k, v in prod.items()])
-            return jsonify({"success": True, "result": balanced})
-
-        # --- ARITHMETIC ---
-        else:
-            result = sp.sympify(raw_input).evalf()
-            return jsonify({"success": True, "result": str(round(result, 4))})
-
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)})
-
-
-
-    import re
-    command_word = raw_input.split()[0].lower() # Get the first word (force, energy, etc.)
-    
-    # Smarter Regex: only grabs numbers, ignoring letters in the command word
-    # This looks for digits, decimals, and scientific notation ONLY when preceded by space or =
-    nums = [float(n) for n in re.findall(r"[-+]?\d*\.\d+|\d+", raw_input)] 
-
-    formulas = {
-        "force": ("Newton's Second Law", lambda m, a: m * a, "N"),
-        "work": ("Mechanical Work", lambda f, d: f * d, "J"),
-        "power": ("Power Output", lambda w, t: w / t, "W"),
-        "velocity": ("Linear Velocity", lambda d, t: d / t, "m/s"),
-        "gravity": ("Weight", lambda m: m * 9.81, "N"),
-        "energy": ("Kinetic Energy", lambda m, v: 0.5 * m * (v**2), "J"),
-        "ohm": ("Ohm's Law", lambda i, r: i * r, "V"),
-        "density": ("Density", lambda m, v: m / v, "kg/m³"),
-        "einstein": ("Relativity", lambda m: m * (3e8**2), "J"),
-        "photon": ("Quantum Energy", lambda f: 6.626e-34 * f, "J")
-    }
-
-    try:
-        if command_word in formulas:
-            name, logic, unit = formulas[command_word]
-            result = logic(*nums)
-            formatted_res = "{:.4e}".format(result) if abs(result) < 0.01 and result != 0 else round(result, 4)
-            return f"{name}: {formatted_res} {unit}"
-        return "MODEL_NOT_FOUND"
-    except Exception as e:
-        return f"PARAM_ERR: {command_word} needs {logic.__code__.co_argcount} numbers."
 
 def handle_physics_logic(raw_input):
     import re
