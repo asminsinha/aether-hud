@@ -7,18 +7,12 @@ from scapy.all import srp, Ether, ARP, conf
 import socket
 from flask import Flask, jsonify, send_file, request
 import sympy as sp
-import sympy.physics.units as u
-from sympy.physics.control.lti import TransferFunction
 from chempy import balance_stoichiometry
 from flask_cors import CORS
-import google.generativeai as genai
 import os
 
 app = Flask(__name__, static_url_path="", static_folder=".")
 CORS(app)
-
-genai.configure(api_key="AIzaSyBovY5t4A7PoIhm4El74mX-UbXdzqcUbJo")
-model = genai.GenerativeModel('gemini-3-flash-preview')
 
 last_net_io = psutil.net_io_counters()
 last_net_time = time.time()
