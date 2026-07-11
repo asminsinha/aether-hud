@@ -1,4 +1,4 @@
-annotated-types==0.7.0
+﻿annotated-types==0.7.0
 anyio==4.14.1
 appdirs==1.4.4
 argon2-cffi==25.1.0
@@ -139,4 +139,3 @@ webcolors==25.10.0
 webencodings==0.5.1
 websocket-client==1.9.0
 Werkzeug==3.1.8
-
