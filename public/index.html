@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETHER - AI HUD</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    <script src="https://cdn.jsdelivr.net/npm/algebrite@1.4.0/dist/algebrite.bundle-for-browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<div class="core" id="main-core">
+    <div class="ring outer"></div>
+    <div class="ring inner"></div>
+    <img src="http://127.0.0.1:5000/core_back_gif" id="jarvis-back-gif">
+    <img src="http://127.0.0.1:5000/core_gif" id="jarvis-gif">
+</div>
+
+<div id="telemetry-panel" class="hud-panel left-panel">
+    <div class="header">AETHER_UPLINK</div>
+    <div id="clock">00:00:00</div>
+    <div id="date">-- --- 2026</div>
+    <div class="divider"></div>
+</div>
+
+<div id="info-panel" class="hud-panel right-panel">
+    <div class="header">NEURAL_EVENT_LOG</div>
+    <div id="activity-log"></div>
+    <div class="divider"></div>
+    <div id="selection-details">AWAITING_INPUT</div>
+</div>
+
+<div class="scene"><div class="carousel" id="carousel"></div></div>
+
+<div id="visual-telemetry">
+    <div class="t-container">NEURAL_SYNC <div class="t-bg"><div id="bar1" class="t-fill"></div></div></div>
+    <div class="t-container">DATA_FLOW <div class="t-bg"><div id="bar2" class="t-fill"></div></div></div>
+    <div class="t-container">CORE_FREQ <div class="t-bg"><div id="bar3" class="t-fill"></div></div></div>
+</div>
+
+<div class="cam-container">
+    <video id="cam" autoplay playsinline style="display:none;"></video>
+    <canvas id="output-canvas"></canvas>
+</div>
+
+<!-- Place this in index.html, right before your <script> tags -->
+<div id="holodeck-window">
+    <div id="holodeck-carousel">
+        <div class="carousel-item" onclick="Holodeck.loadAtom()">ATOM</div>
+        <div class="carousel-item">PLANET</div>
+        <!-- Add more items as we build them -->
+    </div>
+    <div id="holodeck-canvas-container" style="width: 100%; height: 100%;"></div>
+  
+    <button id="close-holodeck" onclick="Holodeck.close()" style="position:absolute; top:10px; right:10px; z-index:1001; background:none; border:1px solid #00f7ff; color:#00f7ff; cursor:pointer;">[X] EXIT HOLODECK</button>
+</div>
+
+<script src="holodeck_engine.js"></script>
+<script src="app.js"></script>
+
+<div id="module-overlay" style="display:none; flex-direction:column; align-items:center;">
+    <button class="exit-btn" onclick="closeModule()" style="position:absolute; top:10px; right:10px;">X_CLOSE</button>
+    <div class="header" id="overlay-title">SYSTEM_MODULE</div>
+    <div id="overlay-content" style="width:100%;"></div>
+    <div class="divider"></div>
+</div>
+</body>
+</html>
